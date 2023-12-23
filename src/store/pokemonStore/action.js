@@ -20,7 +20,7 @@ const getAllPokemons =
     console.log(extractArray);
   };
 
-const getLimitedPokemons = async () => {
+const getLimitedPokemons = () => async (dispatch) => {
   const response = await axios.get(`${baseURL}pokemon?limit=100000&offset=0`);
 
   const allPromises = response?.data?.results?.map(

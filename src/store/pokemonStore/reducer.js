@@ -1,10 +1,12 @@
-import {
+import { pokemonsConstants } from "../../constants/actionTypes";
+
+const {
   GET_ALL_POKEMONS,
   GET_LIMITED_POKEMONS,
   SEARCH_POKEMONS,
   TYPE_SELECTED,
   LOADING,
-} from "../../constants/actionTypes";
+} = pokemonsConstants;
 
 const initialState = {
   allPokemonsData: [],
@@ -14,7 +16,7 @@ const initialState = {
   typeSelected: "",
 };
 
-const pokemonReducer = (state = initialState, action) => {
+export const pokemonReducer = (state = initialState, action) => {
   switch (action.types) {
     case LOADING:
       return { ...state, loading: action.payload };
