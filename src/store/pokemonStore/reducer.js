@@ -25,7 +25,7 @@ const pokemonReducer = (state = initialState, action) => {
     case SEARCH_POKEMONS:
       return { ...state, searchTerm: action.payload };
     case TYPE_SELECTED:
-      return { ...state, searchTerm: action.payload };
+      return { ...state, typeSelected: action.payload };
     default:
       return state;
   }
