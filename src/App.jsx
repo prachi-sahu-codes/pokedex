@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route } from "react-router";
 import { useDispatch } from "react-redux";
 import "./App.css";
-import { Home, NotFound } from "./pages";
+import { Home, NotFound, Search } from "./pages";
 import {
   getAllPokemons,
   getLimitedPokemons,
@@ -19,6 +19,7 @@ const App = () => {
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
