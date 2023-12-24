@@ -1,36 +1,76 @@
 import { baseURL } from "../../constants/urls";
 import axios from "axios";
+import { pokemonsConstants } from "../../constants/actionTypes";
+const {
+  GET_ALL_POKEMONS,
+  GET_LIMITED_POKEMONS,
+  SEARCH_POKEMONS,
+  TYPE_SELECTED,
+  GET_ALL_TYPES,
+  LOADING,
+} = pokemonsConstants;
 
 const offset = 0;
 
-const getAllPokemons =
-  (limit = 40) =>
+const getLimitedPokemons =
+  (limit = 8) =>
   async (dispatch) => {
-    const response = await axios.get(
-      `${baseURL}pokemon?limit=${limit}&offset=${offset}`
-    );
+    try {
+      dispatch({ type: LOADING, payload: true });
 
+      const response = await axios.get(
+        `${baseURL}pokemon?limit=${limit}&offset=${offset}`
+      );
+      const allPromises = response?.data?.results?.map(
+        async ({ url }) => await axios.get(url)
+      );
+      const data = await axios.all(allPromises);
+      const extractArray = data.map((obj) => obj.data);
+      dispatch({ type: LOADING, payload: false });
+      dispatch({ type: GET_LIMITED_POKEMONS, payload: extractArray });
+    } catch (error) {
+      dispatch({ type: LOADING, payload: false });
+      console.error("Error fetching limited Pokemon data:", error);
+      dispatch({ type: "ERROR", payload: error.message });
+    }
+  };
+
+const getAllPokemons = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: true });
+
+    const response = await axios.get(`${baseURL}pokemon?limit=100000&offset=0`);
     const allPromises = response?.data?.results?.map(
       async ({ url }) => await axios.get(url)
     );
-
     const data = await axios.all(allPromises);
-
     const extractArray = data.map((obj) => obj.data);
-    console.log(extractArray);
-  };
 
-const getLimitedPokemons = () => async (dispatch) => {
-  const response = await axios.get(`${baseURL}pokemon?limit=100000&offset=0`);
-
-  const allPromises = response?.data?.results?.map(
-    async ({ url }) => await axios.get(url)
-  );
-
-  const data = await axios.all(allPromises);
-
-  const extractArray = data.map((obj) => obj.data);
-  console.log(extractArray);
+    dispatch({ type: LOADING, payload: false });
+    dispatch({ type: GET_ALL_POKEMONS, payload: extractArray });
+  } catch (error) {
+    dispatch({ type: LOADING, payload: false });
+    console.error("Error fetching all Pokemon data:", error);
+    dispatch({ type: "ERROR", payload: error.message });
+  }
 };
 
-export { getAllPokemons, getLimitedPokemons };
+const getAllPokemonsType = () => async (dispatch) => {
+  try {
+    const response = await axios.get(`${baseURL}type`);
+    const newArr = response?.data?.results.map((obj, index) => ({
+      id: index,
+      text: obj?.name.charAt(0).toUpperCase() + obj?.name.slice(1),
+    }));
+    const typeArr = newArr.filter(
+      (obj) => obj.text !== "Unknown" && obj.text !== "Normal"
+    );
+
+    dispatch({ type: GET_ALL_TYPES, payload: typeArr });
+  } catch (error) {
+    console.error("Error fetching Pokemon types:", error);
+    dispatch({ type: "ERROR", payload: error.message });
+  }
+};
+
+export { getAllPokemons, getLimitedPokemons, getAllPokemonsType };
