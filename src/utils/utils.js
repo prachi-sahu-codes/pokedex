@@ -1,3 +1,5 @@
+import { colorsArr } from "../constants/data";
+
 export const debounce = (func, delay) => {
   let timeout;
 
@@ -10,3 +12,6 @@ export const debounce = (func, delay) => {
     }, delay);
   };
 };
+
+export const cardColor = (text) =>
+  colorsArr.find((obj) => obj.type === text).color;

@@ -12,26 +12,28 @@ const {
 
 const limit = 8;
 
-const getLimitedPokemons = (offset=0) => async (dispatch) => {
-  try {
-    dispatch({ type: LOADING, payload: true });
+const getLimitedPokemons =
+  (offset = 0) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: LOADING, payload: true });
 
-    const response = await axios.get(
-      `${baseURL}pokemon?limit=${limit}&offset=${offset}`
-    );
-    const allPromises = response?.data?.results?.map(
-      async ({ url }) => await axios.get(url)
-    );
-    const data = await axios.all(allPromises);
-    const extractArray = data.map((obj) => obj.data);
-    dispatch({ type: LOADING, payload: false });
-    dispatch({ type: GET_LIMITED_POKEMONS, payload: extractArray });
-  } catch (error) {
-    dispatch({ type: LOADING, payload: false });
-    console.error("Error fetching limited Pokemon data:", error);
-    dispatch({ type: "ERROR", payload: error.message });
-  }
-};
+      const response = await axios.get(
+        `${baseURL}pokemon?limit=${limit}&offset=${offset}`
+      );
+      const allPromises = response?.data?.results?.map(
+        async ({ url }) => await axios.get(url)
+      );
+      const data = await axios.all(allPromises);
+      const extractArray = data.map((obj) => obj.data);
+      dispatch({ type: LOADING, payload: false });
+      dispatch({ type: GET_LIMITED_POKEMONS, payload: extractArray });
+    } catch (error) {
+      dispatch({ type: LOADING, payload: false });
+      console.error("Error fetching limited Pokemon data:", error);
+      dispatch({ type: "ERROR", payload: error.message });
+    }
+  };
 
 const getAllPokemons = () => async (dispatch) => {
   try {
@@ -56,13 +58,10 @@ const getAllPokemons = () => async (dispatch) => {
 const getAllPokemonsType = () => async (dispatch) => {
   try {
     const response = await axios.get(`${baseURL}type`);
-    const newArr = response?.data?.results.map((obj, index) => ({
+    const typeArr = response?.data?.results.map((obj, index) => ({
       id: index,
       text: obj?.name.charAt(0).toUpperCase() + obj?.name.slice(1),
     }));
-    const typeArr = newArr.filter(
-      (obj) => obj.text !== "Unknown" && obj.text !== "Normal"
-    );
 
     dispatch({ type: GET_ALL_TYPES, payload: typeArr });
   } catch (error) {
