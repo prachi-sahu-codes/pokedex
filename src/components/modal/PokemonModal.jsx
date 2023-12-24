@@ -5,6 +5,7 @@ import { CgPokemon } from "react-icons/cg";
 import ProgressBar from "../progressBar/ProgressBar";
 
 const PokemonModal = ({ open, handleClose, pokemonData }) => {
+  
   return (
     <Modal
       open={open}
@@ -12,7 +13,7 @@ const PokemonModal = ({ open, handleClose, pokemonData }) => {
       aria-labelledby="Pokemon modal"
       aria-describedby="Pokemon Stats"
     >
-      <div className="p-3 text-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] lg:w-[500px] bg-[#fbfaf7] rounded-md">
+      <div className="p-3 text-black absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[400px] lg:w-[500px] bg-[#e3e3e3] rounded-md">
         <div className="flex justify-between">
           <h2 className="capitalize text-xl font-semibold pb-4">
             {pokemonData?.name} Stats
@@ -21,7 +22,7 @@ const PokemonModal = ({ open, handleClose, pokemonData }) => {
             <RxCross2 className="w-5 h-5 text-gray-500 hover:text-gray-700" />
           </div>
         </div>
-        <hr className="mb-5" />
+        <hr className="mb-5 border-gray-400" />
         <div className="relative flex justify-between items-center gap-10 p-4">
           <img
             className="w-32 h-32 lg:w-40 lg:h-40 object-contain mt-4 z-10 hidden sm:block"

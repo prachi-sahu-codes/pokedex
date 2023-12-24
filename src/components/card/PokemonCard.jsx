@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import Pill from "../pill/Pill";
 import { CgPokemon } from "react-icons/cg";
+import { cardColor } from "../../utils/utils";
 
 const PokemonCard = ({ pokemon }) => {
+  const bgColor = cardColor(pokemon?.types[0]?.type.name) ?? "#14b8a6";
+ 
   return (
-    <div className="relative sm380:w-80 sm:w-full p-6 rounded-3xl bg-teal-400 m-auto shadow-md overflow-hidden">
+    <div
+      className={`relative sm380:w-80 sm:w-full p-6 rounded-3xl m-auto shadow-md overflow-hidden`}
+      style={{ backgroundColor: bgColor }}
+    >
       <div className="flex justify-between">
         <div className="z-10">
           <h2 className="capitalize text-xl font-semibold text-white pb-4">

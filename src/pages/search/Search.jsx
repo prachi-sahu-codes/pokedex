@@ -74,7 +74,11 @@ const Search = () => {
       )}
       <div className="flex justify-between p-4">
         <Button text="Previous" action={() => selectPageHandler(page - 1)} />
-        <Button text="Next" action={() => selectPageHandler(page + 1)} />
+        <Button
+          text="Next"
+          action={() => selectPageHandler(page + 1)}
+          style="w-[100px]"
+        />
       </div>
       <PokemonModal
         open={open}
