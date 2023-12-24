@@ -5,14 +5,12 @@ import "./App.css";
 import { Home, NotFound, Search } from "./pages";
 import {
   getAllPokemons,
-  getLimitedPokemons,
 } from "./store/pokemonStore/action";
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllPokemons());
-    dispatch(getLimitedPokemons());
   }, []);
 
   return (

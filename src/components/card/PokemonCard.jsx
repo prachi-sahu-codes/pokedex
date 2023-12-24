@@ -11,8 +11,10 @@ const PokemonCard = ({ pokemon }) => {
             {pokemon?.name}
           </h2>
           <ul className="flex gap-2 flex-col">
-            {pokemon?.types.map(({ type }) => (
-              <Pill text={type?.name} />
+            {pokemon?.types.map(({ type, index }) => (
+              <li key={index}>
+                <Pill text={type?.name} />
+              </li>
             ))}
           </ul>
         </div>
