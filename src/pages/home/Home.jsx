@@ -12,26 +12,29 @@ import { getLimitedPokemons } from "../../store/pokemonStore/action";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { limitedPokemonsData, loading } = useSelector(
+  const { limitedPokemonsData, allPokemonsData, loading } = useSelector(
     ({ pokemons }) => pokemons
   );
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [open, setOpen] = useState(false);
   const [pokemonData, setPokemonData] = useState({});
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const selectPageHandler = (selectedPage) => {
+    console.log(selectedPage);
     if (
-      selectedPage >= 1 &&
-      selectedPage <= products.length / 10 &&
+      selectedPage >= 0 &&
+      selectedPage <= allPokemonsData.length / 8 &&
       selectedPage !== page
     ) {
       setPage(selectedPage);
     }
   };
+
   useEffect(() => {
-    // dispatch(getLimitedPokemons(page * 8));
+    dispatch(getLimitedPokemons(page * 8));
   }, [page]);
+
   return (
     <div>
       <Filter />
@@ -47,7 +50,7 @@ const Home = () => {
       ) : (
         <ul className="w-full grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 pr-7">
           {limitedPokemonsData
-            ?.slice(page * 8 - 8, page * 8)
+            ?.slice((page + 1) * 8 - 8, (page + 1) * 8)
             ?.map((pokemon) => (
               <li
                 key={pokemon?.id}
@@ -62,8 +65,8 @@ const Home = () => {
         </ul>
       )}
       <div className="flex justify-between p-4">
-        <Button text="Previous" onClick={() => selectPageHandler(page - 1)} />
-        <Button text="Next" onClick={() => selectPageHandler(page + 1)} />
+        <Button text="Previous" action={() => selectPageHandler(page - 1)} />
+        <Button text="Next" action={() => selectPageHandler(page + 1)} />
       </div>
       <PokemonModal
         open={open}

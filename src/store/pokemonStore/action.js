@@ -10,30 +10,28 @@ const {
   LOADING,
 } = pokemonsConstants;
 
-const offset = 0;
+const limit = 8;
 
-const getLimitedPokemons =
-  (limit = 8) =>
-  async (dispatch) => {
-    try {
-      dispatch({ type: LOADING, payload: true });
+const getLimitedPokemons = (offset=0) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: true });
 
-      const response = await axios.get(
-        `${baseURL}pokemon?limit=${limit}&offset=${offset}`
-      );
-      const allPromises = response?.data?.results?.map(
-        async ({ url }) => await axios.get(url)
-      );
-      const data = await axios.all(allPromises);
-      const extractArray = data.map((obj) => obj.data);
-      dispatch({ type: LOADING, payload: false });
-      dispatch({ type: GET_LIMITED_POKEMONS, payload: extractArray });
-    } catch (error) {
-      dispatch({ type: LOADING, payload: false });
-      console.error("Error fetching limited Pokemon data:", error);
-      dispatch({ type: "ERROR", payload: error.message });
-    }
-  };
+    const response = await axios.get(
+      `${baseURL}pokemon?limit=${limit}&offset=${offset}`
+    );
+    const allPromises = response?.data?.results?.map(
+      async ({ url }) => await axios.get(url)
+    );
+    const data = await axios.all(allPromises);
+    const extractArray = data.map((obj) => obj.data);
+    dispatch({ type: LOADING, payload: false });
+    dispatch({ type: GET_LIMITED_POKEMONS, payload: extractArray });
+  } catch (error) {
+    dispatch({ type: LOADING, payload: false });
+    console.error("Error fetching limited Pokemon data:", error);
+    dispatch({ type: "ERROR", payload: error.message });
+  }
+};
 
 const getAllPokemons = () => async (dispatch) => {
   try {
